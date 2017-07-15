@@ -1,0 +1,79 @@
+{% extends "main/base.html" %}
+{% block title %}
+Domain Records
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="/static/main/css/uniform.css" />
+<link rel="stylesheet" href="/static/main/css/select2.css" />
+{% endblock css %}
+{% block cd %}
+<a class="current" href="#">Domain Lookup Results</a>
+{% endblock cd %}
+{% block header %}
+Domain Lookup
+<img src='/static/main/img/spinner.gif' id='loading_spinner'>
+{% endblock header %}
+{% block content %}
+
+
+<form action="" method="post" id="query">
+    {% csrf_token %}
+    <input type="hidden" name="domain" id="domain" value="{{domain}}"/>
+</form>
+
+<div class="alert alert-success alert-block" style="display:none;" id="fetchComplete">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  <h4 class="alert-heading">Success!</h4>
+      Domain Records Fetched
+</div>
+
+<div class="row-fluid">
+  <div class="span12" id="result">
+
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="/static/main/js/select2.min.js"></script>
+<script src="/static/main/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#sb-home").addClass('active');
+  list = [
+    '{% url 'a:get' %}',
+    '{% url 'aaaa:get' %}',
+    '{% url 'mx:get' %}',
+    '{% url 'whoisrec:get' %}',
+    '{% url 'blacklist:get' %}',
+    '{% url 'ptr:get' %}',
+  ]
+  for(i=0; i<list.length;i++){
+    $.ajax({
+      url : list[i],
+      type: "POST",
+      data: $('#query').serialize(),
+      success: function (data) {
+        $("#result").prepend(data);
+        $('.data-table').dataTable({
+          "bJQueryUI": true,
+          "sPaginationType": "full_numbers",
+          "sDom": '<""l>t<"F"fp>',
+          "bRetrieve": true,
+          "aaSorting": []
+        });
+        $('#result').children().first().slideDown();
+      },
+      error: function (jXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+      }
+    });
+  }
+  $( document ).ajaxStop(function() {
+    $('#fetchComplete').fadeIn();
+    $('#loading_spinner').fadeOut();
+  });
+});
+
+</script>
+{% endblock javascript %}

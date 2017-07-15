@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Home
+{% endblock title %}
+{% block content %}
+<div class="quick-actions_homepage">
+  <ul class="quick-actions">
+    <li class="bg_lb"> <a href="{% url 'a:index' %}"> <i class="icon-list"></i>A Records</a> </li>
+    <li class="bg_lg"> <a href="{% url 'aaaa:index' %}"> <i class="icon-list"></i>AAAA Records</a> </li>
+    <li class="bg_ly"> <a href="{% url 'mx:index' %}"> <i class="icon-envelope"></i>MX Records</a> </li>
+    <li class="bg_lo"> <a href="{% url 'blacklist:index' %}"> <i class="icon-info-sign"></i> Blacklist</a> </li>
+    <li class="bg_ls"> <a href="{% url 'whoisrec:index' %}"> <i class="icon-globe"></i>WHOIS</a> </li>
+    <li class="bg_lo"> <a href="{% url 'ptr:index' %}"> <i class="icon-file"></i> Reverse Lookup</a> </li>
+  </ul>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="widget-box">
+      <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+        <h5>Get All Records</h5>
+      </div>
+      <div class="widget-content nopadding">
+        <form action="{% url 'getall' %}" method="POST" class="form-horizontal">
+          {% csrf_token %}
+          <div class="control-group">
+            <label class="control-label">Domain :</label>
+            <div class="controls">
+              <input type="text" class="span11" placeholder="example.com" name="domain" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">Go</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+<script>
+  $("#sb-home").addClass('active');
+</script>
+{% endblock javascript %}

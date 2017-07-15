@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <title>Domain Tools</title><meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/static/main/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/static/main/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" href="/static/main/css/matrix-login.css" />
+        <link href="/static/main/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+
+    </head>
+    <body>
+        <div id="loginbox">
+            <form id="loginform" class="form-vertical" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+				    <div class="control-group normal_text"> <h3><img src="/static/main/img/logo.png" alt="Logo" /></h3></div>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="main_input_box">
+                            <span class="add-on bg_lg"><i class="icon-user"> </i></span>
+                            <input name="username" autofocus="" required="" id="id_username" maxlength="254" type="text" placeholder="Username" />
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="main_input_box">
+                            <span class="add-on bg_ly"><i class="icon-lock"></i></span>
+                            <input name="password" required="" id="id_password" type="password" placeholder="Password" />
+                        </div>
+                    </div>
+                </div>
+                {% if form.errors %}
+                <div class="alert alert-error">
+                <strong>Error!</strong> Your password and username didn't match </div>
+                {% endif %}
+                <div class="form-actions">
+                    <span class="pull-right"><button type="submit" class="btn btn-success"> Login</button></span>
+                </div>
+            </form>
+        </div>
+
+        <script src="/static/main/js/jquery.min.js"></script>
+    </body>
+
+</html>

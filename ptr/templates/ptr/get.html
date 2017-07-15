@@ -1,0 +1,41 @@
+{% if invalid %}
+<div class="alert alert-error alert-block" style="display:none;">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">PTR Lookup error!</h4>
+Invalid IP address {{domain}}
+</div>
+{% else %}
+<!-- start table -->
+<div class="widget-box" style="display:none;">
+  <div class="widget-title"> <span class="icon"><i class="icon-external-link"></i></span>
+    <h5>{{domain}} - PTR Records</h5>
+  </div>
+  {% if records %}
+  <div class="widget-content">
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+          <th>IP Address</th>
+          <th>Location</th>
+          <th>Domain</th>
+          <th>TTL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="gradeA">
+          <td>{{records.ip}}</td>
+          <td>{{records.location}}</td>
+          <td>{{records.domain}}</td>
+          <td class="center">{{records.ttl}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="widget-content">
+    No PTR Records were found.
+  </div>
+  {% endif %}
+</div>
+<!-- end table -->
+{% endif %}

@@ -1,0 +1,48 @@
+{% if invalid %}
+<div class="alert alert-error alert-block" style="display:none;">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">Error!</h4>
+Invalid domain {{domain}}
+</div>
+{% else %}
+<!-- start table -->
+<div class="widget-box" style="display:none;">
+  <div class="widget-title"> <span class="icon"><i class="icon-globe"></i></span>
+    <h5>{{domain}} WHOIS Data </h5>
+  </div>
+  <div class="widget-content">
+    {% if records %}
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Value</th>
+        </tr>
+        </thead>
+          <tbody>
+          {% for i in records.table %}
+            <tr class="gradeA">
+            {% for j in i %}
+              <td>{{j}}</td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          No WHOIS records found
+        {% endif %}
+  </div>
+</div>
+{% if records %}
+<div class="widget-box" style="">
+  <div class="widget-title"> <span class="icon"><i class="icon-globe"></i></span>
+    <h5>{{domain}}: Raw WHOIS</h5>
+  </div>
+  <div class="widget-content" style="height: 150px;overflow-x:hidden;overflow-y:scroll;">
+    {{records.raw|linebreaks}}
+  </div>
+</div>
+{% endif %}
+<!-- end table -->
+{% endif %}

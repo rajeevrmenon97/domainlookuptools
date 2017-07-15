@@ -1,0 +1,122 @@
+{% extends 'main/base.html' %}
+{% block title %}
+AAAA Record
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="/static/main/css/uniform.css" />
+<link rel="stylesheet" href="/static/main/css/select2.css" />
+{% endblock css %}
+{% block cd %}
+<a class="current" href="#">AAAA Lookup</a>
+{% endblock cd %}
+{% block header %}
+AAAA Lookup
+{% endblock header %}
+{% block content %}
+
+{% if invalid %}
+<div class="alert alert-error alert-block">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">Error!</h4>
+No qualified domain names were found in the file.
+</div>
+{% endif %}
+<div class="row-fluid">
+  <div class="span6">
+    <div class="widget-box query_widget" style="display:none;">
+      <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+        <h5>AAAA Record</h5>
+      </div>
+      <div class="widget-content nopadding">
+        <form action="" method="post" class="form-horizontal" id="query">
+          {% csrf_token %}
+          <div class="control-group">
+            <label class="control-label">Domain :</label>
+            <div class="controls">
+              <input type="text" class="span11" placeholder="example.com" name="domain" value="{{domain}}"/>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success submit_button">Go</button>
+            <img src='/static/main/img/spinner.gif' class='loading_spinner' style="dispay:inline;">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="span6">
+    <div class="widget-box query_widget" style="display:none;">
+      <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+        <h5>File</h5>
+      </div>
+      <div class="widget-content nopadding">
+        <form action="{% url 'aaaa:getfile' %}" method="POST" class="form-horizontal" id="file_query" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="control-group">
+            <label class="control-label">File :</label>
+            <div class="controls">
+              <input type="file" class="span11" name="file_location" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success submit_button">Go</button>
+            <img src='/static/main/img/spinner.gif' class='loading_spinner' style="dispay:inline;">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="row-fluid">
+  <div class="span12" id="result">
+
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="/static/main/js/select2.min.js"></script>
+<script src="/static/main/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  $("#sb-dns").addClass('active');
+  $('.loading_spinner').css('display','none');
+  $('.query_widget').slideDown();
+  $('#query').on('submit', function(e) {
+    e.preventDefault();
+    if(!$('input[name=domain]').val()){
+      return;
+    }
+    $('.submit_button').hide()
+    $('.loading_spinner').fadeIn();
+    $.ajax({
+      url : '{% url 'aaaa:get' %}',
+      type: "POST",
+      data: $(this).serialize(),
+      success: function (data) {
+        $("#result").prepend(data);
+        $('#result').children().first().slideDown();
+        $('.data-table').dataTable({
+          "bJQueryUI": true,
+          "sPaginationType": "full_numbers",
+          "sDom": '<""l>t<"F"fp>',
+          "bRetrieve": true,
+          "aaSorting": []
+        });
+        $('.submit_button').fadeIn();
+        $('.loading_spinner').fadeOut();
+      },
+      error: function (jXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+      }
+    });
+  });
+});
+</script>
+{% endblock javascript %}

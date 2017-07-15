@@ -1,0 +1,45 @@
+{% if invalid %}
+<div class="alert alert-error alert-block" style="display:none;">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">Blacklist lookup error!</h4>
+Invalid domain or IP {{domain}}
+</div>
+{% else %}
+<!-- start table -->
+<div class="widget-box" style="display:none;">
+  <div class="widget-title"> <span class="icon"><i class="icon-info-sign"></i></span>
+    <h5>{{domain}} -  Blacklist</h5>
+  </div>
+  {% if records %}
+  <div class="widget-content">
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Blacklist</th>
+          <th>Address</th>
+          <th>TTL</th>
+          <th>TXT</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in records %}
+        <tr class="gradeA">
+          <td class="center">{{i.status}}</td>
+          <td>{{i.blacklist}}</td>
+          <td>{{i.address}}</td>
+          <td class="center">{{i.ttl}}</td>
+          <td>{{i.txt}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="widget-content">
+    No blacklist Records were found.
+  </div>
+  {% endif %}
+</div>
+<!-- end table -->
+{% endif %}

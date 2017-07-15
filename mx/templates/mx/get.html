@@ -1,0 +1,49 @@
+<!-- start table -->
+{% if invalid %}
+<div class="alert alert-error alert-block" style="display:none;">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">MX Lookup error!</h4>
+Invalid domain {{domain}}
+</div>
+{% else %}
+<div class="widget-box" style="display:none;">
+  <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+    <h5>{{domain}} - MX Records</h5>
+  </div>
+  {% if records %}
+  <div class="widget-content">
+    <table class="table table-bordered data-table">
+      <thead>
+        <tr>
+          <th>Pref</th>
+          <th>Hostname</th>
+          <th>Address</th>
+          <th>Location</th>
+          <th>PTR</th>
+          <th>TTL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in records %}
+        {% for j in i.ip %}
+        <tr class="gradeA">
+          <td class="center">{{i.pref}}</td>
+          <td>{{i.hostname}}</td>
+          <td>{{j.address}}</td>
+          <td>{{j.location}}</td>
+          <td>{{j.ptr}}</td>
+          <td class="center">{{i.ttl}}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="widget-content">
+    No MX Records were found.
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+<!-- end table -->

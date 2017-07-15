@@ -1,0 +1,74 @@
+{% extends "main/base.html" %}
+{% block title %}
+Blacklists
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="/static/main/css/uniform.css" />
+<link rel="stylesheet" href="/static/main/css/select2.css" />
+{% endblock css %}
+{% block cd %}
+<a class="current" href="#">Blacklists</a>
+{% endblock cd %}
+{% block header %}
+Blacklist Records
+<img src='/static/main/img/spinner.gif' id='loading_spinner'>
+{% endblock header %}
+{% block content %}
+
+
+<form action="" method="post" id="query">
+    {% csrf_token %}
+    <input type="hidden" name="domain" id="domain"/>
+</form>
+
+<div class="alert alert-success alert-block" style="display:none;" id="fetchComplete">
+  <a class="close" data-dismiss="alert" href="#">×</a>
+  <h4 class="alert-heading">Success!</h4>
+      Blacklist Records Fetched
+</div>
+
+<div class="row-fluid">
+  <div class="span12" id="result">
+
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="/static/main/js/select2.min.js"></script>
+<script src="/static/main/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#sb-blacklist").addClass('active');
+  dom = "{{dom_json}}".replace(/&quot;/g,"\"");
+  dom = JSON.parse(dom);
+  for(i=0; i<dom.length;i++){
+    $('#domain').val(dom[i]);
+    $.ajax({
+      url : '{% url 'blacklist:get' %}',
+      type: "POST",
+      data: $('#query').serialize(),
+      success: function (data) {
+        $("#result").prepend(data);
+        $('.data-table').dataTable({
+          "bJQueryUI": true,
+          "sPaginationType": "full_numbers",
+          "sDom": '<""l>t<"F"fp>',
+          "bRetrieve": true,
+          "aaSorting": []
+        });
+        $('#result').children().first().slideDown();
+      },
+      error: function (jXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+      }
+    });
+  }
+  $( document ).ajaxStop(function() {
+    $('#fetchComplete').fadeIn();
+    $('#loading_spinner').fadeOut();
+  });
+});
+
+</script>
+{% endblock javascript %}
